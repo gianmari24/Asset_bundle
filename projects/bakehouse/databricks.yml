@@ -1,6 +1,7 @@
 # This is a Databricks asset bundle definition.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 # See https://learn.microsoft.com/it-it/azure/databricks/dev-tools/bundles/variables for commonly used variables.
+
 bundle:
   # Replace with your bundle name
   name: bundle_bakehouse
@@ -8,6 +9,13 @@ bundle:
 include:
   - resources/*.yml
   - variables/*.yml
+
+resources:
+  dashboards:
+    sales_dashboard:
+      display_name: "${var.v_catalog}Bakehouse Sales Dashboard"
+      file_path: resources/Bakehouse Sales Dashboard_${var.v_catalog}.lvdash.json
+      warehouse_id: 3f98870bff428657   # Serverless Starter Warehouse
 
 targets:
   dev:
@@ -24,7 +32,6 @@ targets:
     # presets:
     #   source_linked_deployment: true
     workspace:
-      # needs to be commented out if using in the workspace UI
       host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183
       root_path: ${var.v_root_path}
       file_path: ${var.v_file_path}
@@ -38,6 +45,7 @@ targets:
   qas:
     variables:
       v_mode: production
+      v_catalog: qas
     mode: ${var.v_mode}
     workspace:
       host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183
@@ -47,14 +55,15 @@ targets:
       - user_name: ${workspace.current_user.userName}
         level: CAN_MANAGE
       - group_name: group_dab
-        level: CAN_MANAGE         
+        level: CAN_MANAGE
     run_as:
-      service_principal_name: service_principal_user
+      service_principal_name: bbf4c6dd-186d-44d4-b994-10ef9b0410ce
 
 
   prod:
     variables:
       v_mode: production
+      v_catalog: prod
     mode: ${var.v_mode}
     workspace: 
       host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183
@@ -66,14 +75,14 @@ targets:
       - group_name: group_dab
         level: CAN_MANAGE         
     run_as:
-      service_principal_name: service_principal_user
+      service_principal_name: bbf4c6dd-186d-44d4-b994-10ef9b0410ce
 
 
-sync:
+#sync:
   # include:
   #   - notebooks/*
-  exclude: 
+  #exclude: 
     #- .gitignore
     #- ./*.yml
-    - README.md
+    #- README.md
     #- schema.json
