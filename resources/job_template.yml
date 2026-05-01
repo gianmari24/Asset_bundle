@@ -1,1 +1,130 @@
-
+resources:
+  jobs:
+    job-template:
+      name: first-job-template
+      queue:
+        enabled: true
+      tasks:
+        - task_key: main_task
+          depends_on:
+            - task_key: Log_Start_Manual
+            - task_key: Check_If_Manual
+              outcome: "false"
+          run_if: AT_LEAST_ONE_SUCCESS
+          notebook_task:
+            # replace with your notebook path
+            notebook_path: bundle_template/notebooks/main_task_template
+            base_parameters: # define your variables here
+              p_catalog: ods_3nf_cert
+              p_schema: ods
+              elt_fk_task_name: "{{task.name}}"
+              elt_fk_task_log: "{{task.run_id}}"
+            source: GIT
+        - task_key: Check_If_Manual
+          condition_task:
+            op: EQUAL_TO
+            left: "{{job.parameters.elt_ds_event_desc}}"
+            right: manual run/repair
+        - task_key: Log_Start_Manual
+          depends_on:
+            - task_key: Check_If_Manual
+              outcome: "true"
+          notebook_task:
+            notebook_path: asset-bundles/eds_driver/Log_Pipeline
+            base_parameters:
+              elt_fk_pipeline_name: "{{job.name}}"
+              elt_fk_schedule_id: "{{job.name}}_manual"
+              elt_cd_pipeline_param: ""
+              elt_cd_status: success
+              elt_cd_event: pipeline_start
+            source: GIT
+        - task_key: Log_End_Success
+          depends_on:
+            - task_key: main_task
+          notebook_task:
+            notebook_path: asset-bundles/eds_driver/Log_Pipeline
+            base_parameters:
+              elt_fk_pipeline_name: "{{job.name}}"
+              elt_fk_schedule_id: "{{job.name}}_manual"
+              elt_cd_pipeline_param: ""
+              elt_cd_status: success
+              elt_cd_event: pipeline_end
+            source: GIT
+        - task_key: Log_End_Fail
+          depends_on:
+            - task_key: main_task
+          run_if: AT_LEAST_ONE_FAILED
+          notebook_task:
+            notebook_path: asset-bundles/eds_driver/Log_Pipeline
+            base_parameters:
+              elt_fk_pipeline_name: "{{job.name}}"
+              elt_fk_schedule_id: "{{job.name}}_manual"
+              elt_cd_pipeline_param: ""
+              elt_cd_status: fail
+              elt_cd_event: pipeline_end
+            source: GIT
+      git_source:
+        git_url: ${bundle.git.origin_url} # https://CNH-Data-Platform@dev.azure.com/CNH-Data-Platform/Data%20Platform/_git/EDS%20ADB%20Bundles
+        git_provider: azureDevOpsServices
+        git_branch: ${bundle.git.branch} # the branch you're currently deploying
+      performance_target: PERFORMANCE_OPTIMIZED
+      schedule:
+        quartz_cron_expression: 0 0 12 * * ?
+        timezone_id: Europe/Amsterdam
+      parameters:
+        - name: elt_dt_elab_date
+          default: "{{job.start_time.iso_date}}"
+        - name: elt_cd_pipeline_log
+          default: "{{job.run_id}}"
+        - name: elt_ds_event_desc
+          default: manual run/repair        
+      max_concurrent_runs: 1
+targets:
+  dev:
+    resources:
+      jobs:
+        job-template:
+          tasks:
+            - task_key: main_task
+              notebook_task:
+                notebook_path: bundle_template/notebooks/main_task_template
+                base_parameters:
+                  p_catalog: ods_3nf_cert
+                  p_schema: ods
+                source: GIT
+          git_source:
+            git_url: ${bundle.git.origin_url} # https://CNH-Data-Platform@dev.azure.com/CNH-Data-Platform/Data%20Platform/_git/EDS%20ADB%20Bundles
+            git_provider: azureDevOpsServices            
+            git_branch: ${bundle.git.branch} # the branch you're currently deploying
+  cert:
+    resources:
+      jobs:
+        job-template:
+          tasks:
+            - task_key: main_task
+              notebook_task:
+                notebook_path: bundle_template/notebooks/main_task_template
+                base_parameters:
+                  p_catalog: ods_3nf_cert
+                  p_schema: ods
+                source: GIT
+          git_source:
+            git_url: ${bundle.git.origin_url} # https://CNH-Data-Platform@dev.azure.com/CNH-Data-Platform/Data%20Platform/_git/EDS%20ADB%20Bundles
+            git_provider: azureDevOpsServices            
+            git_branch: certification           
+  prod:
+    resources:
+      jobs:
+        job-template:
+          tasks:
+            - task_key: main_task
+              notebook_task:
+                notebook_path: bundle_template/notebooks/main_task_template
+                base_parameters:
+                  p_catalog: ods_3nf_prod
+                  p_schema: ods
+                source: GIT
+          git_source:
+            git_url: ${bundle.git.origin_url} # https://CNH-Data-Platform@dev.azure.com/CNH-Data-Platform/Data%20Platform/_git/EDS%20ADB%20Bundles
+            git_provider: azureDevOpsServices            
+            git_branch: production
