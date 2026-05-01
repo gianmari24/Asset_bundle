@@ -1,0 +1,27 @@
+# Databricks notebook source
+dbutils.widgets.text("p_catalog", "")
+dbutils.widgets.text("p_schema", "")
+
+p_catalog = dbutils.widgets.get("p_catalog")
+p_schema = dbutils.widgets.get("p_schema")
+
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC use catalog identifier( :p_catalog )
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select current_catalog()
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC use schema identifier( :p_schema )
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select current_schema()
