@@ -1,0 +1,304 @@
+{
+  "datasets": [
+    {
+      "name": "9b07300c",
+      "displayName": "fact_transactions_sales_denormalized_gold",
+      "config": {
+        "version": "1.1",
+        "source": "prod.gold.fact_transactions_sales_denormalized_gold",
+        "dimensions": [
+          {
+            "name": "customer_ID",
+            "expr": "source.customer_ID",
+            "displayName": "Customer ID"
+          },
+          {
+            "name": "franchise_ID",
+            "expr": "source.franchise_ID",
+            "displayName": "Franchise ID"
+          },
+          {
+            "name": "product_name",
+            "expr": "source.product_name",
+            "displayName": "Product Name"
+          },
+          {
+            "name": "transaction_count",
+            "expr": "source.transaction_count",
+            "displayName": "Transaction Count"
+          },
+          {
+            "name": "total_quantity",
+            "expr": "source.total_quantity",
+            "displayName": "Total Quantity"
+          },
+          {
+            "name": "total_revenue",
+            "expr": "source.total_revenue",
+            "displayName": "Total Revenue"
+          },
+          {
+            "name": "avg_unit_price",
+            "expr": "source.avg_unit_price",
+            "displayName": "Avg Unit Price"
+          },
+          {
+            "name": "sale_date",
+            "expr": "source.sale_date",
+            "displayName": "Sale Date"
+          },
+          {
+            "name": "first_purchase",
+            "expr": "source.first_purchase",
+            "displayName": "First Purchase"
+          },
+          {
+            "name": "last_purchase",
+            "expr": "source.last_purchase",
+            "displayName": "Last Purchase"
+          },
+          {
+            "name": "customer_first_name",
+            "expr": "source.customer_first_name",
+            "displayName": "Customer First Name"
+          },
+          {
+            "name": "customer_last_name",
+            "expr": "source.customer_last_name",
+            "displayName": "Customer Last Name"
+          },
+          {
+            "name": "customer_city",
+            "expr": "source.customer_city",
+            "displayName": "Customer City"
+          },
+          {
+            "name": "customer_country",
+            "expr": "source.customer_country",
+            "displayName": "Customer Country"
+          },
+          {
+            "name": "franchise_name",
+            "expr": "source.franchise_name",
+            "displayName": "Franchise Name"
+          },
+          {
+            "name": "franchise_city",
+            "expr": "source.franchise_city",
+            "displayName": "Franchise City"
+          },
+          {
+            "name": "franchise_country",
+            "expr": "source.franchise_country",
+            "displayName": "Franchise Country"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "468f016a",
+      "displayName": "Sales",
+      "layout": [
+        {
+          "widget": {
+            "name": "cb053720",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9b07300c",
+                  "fields": [
+                    {
+                      "name": "product_name",
+                      "expression": "`product_name`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Total Revenue by Product",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_name",
+                  "displayName": "Product Name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "Total Revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "product_name",
+                  "displayName": "Product Name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "0acf9dce",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9b07300c",
+                  "fields": [
+                    {
+                      "name": "sale_date",
+                      "expression": "`sale_date`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Total Revenue by Sale Date",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "sale_date",
+                  "displayName": "Sale Date",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "Total Revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "852e4d86",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "9b07300c",
+                  "fields": [
+                    {
+                      "name": "franchise_country",
+                      "expression": "`franchise_country`"
+                    },
+                    {
+                      "name": "franchise_name",
+                      "expression": "`franchise_name`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Total Revenue by Product",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "franchise_name",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "Total Revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "franchise_country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}

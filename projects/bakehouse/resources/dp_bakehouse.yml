@@ -1,0 +1,23 @@
+resources:
+  pipelines:
+    pipeline_dp_bakehouse:
+      name: ${var.v_catalog}_dp_bakehouse
+      configuration:
+        catalog: ${var.v_catalog}
+      libraries:
+        - glob:
+            include: ../src/bakehouse_dp/transformations/**
+      schema: bronze
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: ${var.v_catalog}
+      serverless: true
+      tags:
+        Project: ${var.v_catalog}_Demo
+      event_log:
+        name: event_log_dp_bakehouse
+        schema: bronze
+        catalog: ${var.v_catalog}
+      root_path: ../src/bakehouse_dp

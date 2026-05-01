@@ -10,3 +10,5 @@ variables:
     default: development
   v_catalog:
     default: dev
+  v_notification_user:
+    default: gmaritato@kpmg.it
