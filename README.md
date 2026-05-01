@@ -1,1 +1,1 @@
-Asset Bundle Te plate for Databricks
+Asset Bundle Template for Databricks
