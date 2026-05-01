@@ -1,4 +1,4 @@
-# This is a Databricks asset bundle definition for eds_driver.
+# This is a Databricks asset bundle definition.
 # See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
 # See https://learn.microsoft.com/it-it/azure/databricks/dev-tools/bundles/variables for commonly used variables.
 bundle:
@@ -34,7 +34,7 @@ targets:
     #   source_linked_deployment: true
     workspace:
       # needs to be commented out if using in the workspace UI
-      # host: https://adb-3425487887631424.4.azuredatabricks.net
+      # host: xxx
       root_path: ${var.v_root_path}
       file_path: ${var.v_file_path}
     permissions:
@@ -44,14 +44,12 @@ targets:
       # level: CAN_MANAGE
 
 
-  cert:
+  qas:
     variables:
       v_mode: production
-      v_root_path: /Workspace/3NF/ods_elt/.bundle/${bundle.name} # If not explicitly needed, leave the root path like this
-      v_file_path: /Workspace/PATH_TO_CERT # <<<-- UPDATE WITH YOUR PATH HERE --
     mode: ${var.v_mode}
     workspace:
-      host: https://adb-3425487887631424.4.azuredatabricks.net
+      host: xxx
       root_path: ${var.v_root_path}
       file_path: ${var.v_file_path}
     permissions:
@@ -60,26 +58,24 @@ targets:
       - group_name: EDS_DEVELOPER_3NF_PROD
         level: CAN_MANAGE         
     run_as:
-      service_principal_name: 219a0b9f-78f8-45ed-a10d-4e030ffcd6e4
+      service_principal_name: xxx
 
 
   prod:
     variables:
       v_mode: production
-      v_root_path: /Workspace/3NF/ods_elt/.bundle/${bundle.name} # If not explicitly needed, leave the root path like this
-      v_file_path: /Workspace/PATH_TO_PROD # <<<-- UPDATE WITH YOUR PATH HERE -- 
     mode: ${var.v_mode}
     workspace: 
-      host: https://adb-6849659081642841.1.azuredatabricks.net
+      host: xxx
       root_path: ${var.v_root_path}
       file_path: ${var.v_file_path}
     permissions:
       - user_name: ${workspace.current_user.userName}
         level: CAN_MANAGE
-      - group_name: EDS_DEVELOPER_3NF_PROD
+      - group_name: xxx
         level: CAN_MANAGE         
     run_as:
-      service_principal_name: 219a0b9f-78f8-45ed-a10d-4e030ffcd6e4
+      service_principal_name: xxx
 
 
 sync:
