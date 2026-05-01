@@ -1,0 +1,12 @@
+
+variables:
+  v_root_path:
+    default: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}
+    description: 'Default root path for technical files  (currently used only in dev)'
+  v_file_path: 
+    default: /Workspace/Users/${workspace.current_user.userName}/.bundle/${bundle.name}/${bundle.target}/files
+    description: 'Default path to deploy (currently used only in dev)'
+  v_mode: 
+    default: development
+  v_catalog:
+    default: dev
