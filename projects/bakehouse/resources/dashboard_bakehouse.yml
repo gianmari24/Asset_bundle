@@ -1,0 +1,13 @@
+resources:
+  dashboards:
+    # Logical name of the dashboard inside the bundle
+    sales_dashboard:
+      # Display name shown in the Databricks workspace UI
+      # Uses a variable to differentiate dev / qas / prod
+      display_name: "${var.v_catalog}Bakehouse Sales Dashboard"
+      # Local path of the dashboard JSON definition
+      # This file will be uploaded to the workspace during deploy
+      file_path: ../src/bakehouse_dashboard/Bakehouse Sales Dashboard_${var.v_catalog}.lvdash.json
+      # SQL Warehouse ID used by the dashboard
+      # Must exist in the target workspace
+      warehouse_id: 3f98870bff428657   # Serverless Starter Warehouse

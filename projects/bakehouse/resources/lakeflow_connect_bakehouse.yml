@@ -4,7 +4,6 @@ resources:
       name: ${var.v_catalog}_lakeflow_connect_bakehouse
       configuration:
         catalog: ${var.v_catalog}
-        checkpoint_location: /Volumes/{catalog}/bronze/volume/checkpoints/
       tags:
         Project: ${var.v_catalog}_Demo
       ingestion_definition:
