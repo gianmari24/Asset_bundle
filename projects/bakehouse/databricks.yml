@@ -23,7 +23,7 @@ include:
 
 #=============================================================================
 # DEPLOYMENT TARGETS (ENVIRONMENTS)
-# Each target represents one environment (dev / qas / prod)
+# Each target represents one environment (dev/ qas/prod)
 # =============================================================================
 
 targets:
