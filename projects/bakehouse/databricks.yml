@@ -7,7 +7,7 @@
 # - the bundle name
 # - which files are included
 # - the resources to deploy (dashboards, jobs, etc.)
-# - deployment targets (dev / qas / prod)
+# - deployment targets (dev/qas/prod)
 # Used by Databricks for:
 # - resource naming
 # - deployment paths
