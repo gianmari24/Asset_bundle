@@ -1,1 +1,1 @@
-Asset Bundle Template for Databricks
+Asset Bundle Template for Databricks.
