@@ -1,0 +1,107 @@
+# =============================================================================
+# This is a Databricks Asset Bundle definition.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+# See https://learn.microsoft.com/it-it/azure/databricks/dev-tools/bundles/variables
+#
+# This file is the entry point of the bundle and defines:
+# - the bundle name
+# - which files are included
+# - the resources to deploy (dashboards, jobs, etc.)
+# - deployment targets (dev / qas / prod)
+# Used by Databricks for:
+# - resource naming
+# - deployment paths
+# - automatic prefixes in development mode
+# =============================================================================
+
+bundle:
+  name: bundle_bakehouse # Logical name of the bundle.
+
+include:
+  - resources/*.yml # Include all resource definitions (jobs, dashboards, pipelines, ...)
+  - variables/*.yml # Include variable definitions (usually environment-specific)
+
+#=============================================================================
+# DEPLOYMENT TARGETS (ENVIRONMENTS)
+# Each target represents one environment (dev / qas / prod)
+# =============================================================================
+
+targets:
+  dev:
+    # The default target uses 'mode: development' to create a development copy.
+    # - Deployed resources get prefixed with '[dev my_user_name]'
+    # - Any job schedules and triggers are paused by default.
+    # See also https://docs.databricks.com/dev-tools/bundles/deployment-modes.html.
+    variables:
+      v_mode: development # Deployment mode for this environment
+    mode: ${var.v_mode} # Use the deployment mode defined in variables
+    default: true # This target is used when no --target is specified
+    presets:
+      source_linked_deployment: false #By default, when you deploy a bundle to a development target through the workspace, resources created during deployment reference source files in the workspace instead of their workspace copies. To disable this behavior, in your bundle databricks.yml configuration file, set the source_linked_deployment deployment mode preset to false.
+    # Workspace configuration for the dev environment
+    workspace:
+      host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183 # Databricks workspace URL
+      root_path: ${var.v_root_path} # Root path where bundle resources (dashboards, jobs, etc.) are deployed
+      file_path: ${var.v_file_path} # Path where files (notebooks, scripts, assets) are uploaded
+    # Permissions applied to deployed resources
+    permissions:
+    - user_name: ${workspace.current_user.userName}
+      level: CAN_MANAGE
+    # - group_name:
+    #   level: group_dab
+
+  qas:
+    variables:
+      v_mode: production # Production mode: no dev prefixes, schedules enabled
+      v_catalog: qas # Unity Catalog catalog used in QAS
+    mode: ${var.v_mode}
+    presets:
+      name_prefix: qas_
+    workspace:
+      host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183
+      root_path: ${var.v_root_path}
+      file_path: ${var.v_file_path}
+    permissions:
+      # Permissions for the current user
+      - user_name: ${workspace.current_user.userName}
+        level: CAN_MANAGE
+      # Permissions for a Databricks group
+      - group_name: group_dab
+        level: CAN_MANAGE
+    run_as: # Identity used to deploy and run resources. Best practice for non-dev environments
+      service_principal_name: bbf4c6dd-186d-44d4-b994-10ef9b0410ce
+
+  prod:
+    # Production environment
+    variables:
+      v_mode: production
+      v_catalog: prod
+    mode: ${var.v_mode}
+    presets:
+      name_prefix: prod_    
+    workspace:
+      host: https://dbc-afeefbf3-0c30.cloud.databricks.com/?o=7474657116973183
+      root_path: ${var.v_root_path}
+      file_path: ${var.v_file_path}
+    permissions:
+      - user_name: ${workspace.current_user.userName}
+        level: CAN_MANAGE
+      - group_name: group_dab
+        level: CAN_MANAGE
+    run_as:
+      service_principal_name: bbf4c6dd-186d-44d4-b994-10ef9b0410ce
+
+# =============================================================================
+# SYNC SECTION (COMMENTED OUT)
+#
+# Used to synchronize local files (notebooks, scripts, etc.) into the Databricks workspace. Typically enabled in development environments only.
+# =============================================================================
+
+# sync:
+#   include:
+#     - notebooks/*
+#   exclude:
+#     - .gitignore
+#     - ./*.yml
+#     - README.md
+#     - schema.json

@@ -1,0 +1,48 @@
+resources:
+  jobs:
+    lakeflow_Job_Bakehouse:
+      name: lakeflow_Job_Bakehouse
+      email_notifications:
+        on_start:
+          -  ${var.v_notification_user}
+        on_success:
+          - ${var.v_notification_user}
+        on_failure:
+          - ${var.v_notification_user}
+      trigger:
+        pause_status: UNPAUSED
+        file_arrival:
+          url: /Volumes/${var.v_catalog}/bronze/volume/
+      tasks:
+        - task_key: Bakehouse_Lakeflow_Connect
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.pipeline_lakeflow_connect_bakehouse.id}
+            full_refresh: false
+        - task_key: Bakehouse_Declarative_Pipeline
+          depends_on:
+            - task_key: Bakehouse_Lakeflow_Connect
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.pipeline_dp_bakehouse.id}
+            full_refresh: false
+          email_notifications:
+            on_start:
+              - ${var.v_notification_user}
+            on_success:
+              - ${var.v_notification_user}
+            on_failure:
+              - ${var.v_notification_user}
+        - task_key: Bakehouse_Dashboard
+          depends_on:
+            - task_key: Bakehouse_Declarative_Pipeline
+          dashboard_task:
+            subscription:
+              subscribers:
+                - user_name: service_principal_user
+              custom_subject: gmaritato@kpmg.it
+            warehouse_id: 3f98870bff428657
+            dashboard_id: ${resources.dashboards.sales_dashboard.id}
+      tags:
+        Project: ${var.v_catalog}_Demo
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
