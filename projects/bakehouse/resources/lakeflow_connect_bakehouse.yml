@@ -1,7 +1,7 @@
 resources:
   pipelines:
     pipeline_lakeflow_connect_bakehouse:
-      name: ${var.v_catalog}_lakeflow_connect_bakehouse
+      name: lakeflow_connect_bakehouse
       configuration:
         catalog: ${var.v_catalog}
       tags:

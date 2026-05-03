@@ -4,7 +4,7 @@ resources:
     sales_dashboard:
       # Display name shown in the Databricks workspace UI
       # Uses a variable to differentiate dev / qas / prod
-      display_name: "${var.v_catalog}Bakehouse Sales Dashboard"
+      display_name: "Bakehouse Sales Dashboard"
       # Local path of the dashboard JSON definition
       # This file will be uploaded to the workspace during deploy
       file_path: ../src/bakehouse_dashboard/Bakehouse Sales Dashboard_${var.v_catalog}.lvdash.json
