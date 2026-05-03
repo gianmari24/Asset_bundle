@@ -1,7 +1,7 @@
 resources:
   jobs:
     lakeflow_Job_Bakehouse:
-      name: ${var.v_catalog}_lakeflow_Job_Bakehouse
+      name: lakeflow_Job_Bakehouse
       email_notifications:
         on_start:
           -  ${var.v_notification_user}
