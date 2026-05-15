@@ -99,7 +99,7 @@ targets:
 
 # sync:
 #   include:
-#     - notebooks/*
+#     - src/*
 #   exclude:
 #     - .gitignore
 #     - ./*.yml

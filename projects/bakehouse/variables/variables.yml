@@ -9,6 +9,6 @@ variables:
   v_mode: 
     default: development
   v_catalog:
-    default: dev
+    default: dev_dab
   v_notification_user:
     default: gmaritato@kpmg.it
